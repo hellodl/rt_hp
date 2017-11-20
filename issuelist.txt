@@ -1,0 +1,82 @@
+1. why using part of blocks of vgg19 with extra conv layers? 
+
+2. from stage1 to stage_last, there is no activation following the last layer of each stage?
+
+3. what is the difference between this multiSGD and keras' SGD?
+	For example, using SGD to train the last layer at lr=0.01, the other lr*0.1=0.001
+
+4. what is the meaning of 'pycocotools'?
+
+5. steps:
+    a). cd coco/PythonAPI
+    b). sudo python setup.py
+        issue: No module named Cython.Build
+            fix: # To compile and install locally run "python setup.py build_ext --inplace"
+                 # To install library to Python site-packages run "python setup.py build_ext install"
+
+    c). cd ../../../training
+    d). python generate_masks.py
+        notice: use annotations_trainval2017.zip
+        train_size: 118287  val_size: 5000
+
+6. annotations include keys of 'categories', 'licenses', 'annotations' and 'info'
+   in 'annatations', keys might be useful:
+        'keypoints', 'segmentation', 'image_id', 'num_keypoints', 'category_id', 'bbox'
+            - keypoints:
+                v=0: not labeled || v=1: labeled but not visible || v=2: labeled and visible
+                how to tell which part corresponds to which coordinates?
+                train: 64115 images with 262465 persons; valid: 2693 images with 11004 persons
+
+7. details of generate_hdf5.py
+    - import scipy.spatial.distance import cdist
+    - import struct   # 数据格式转换
+    - import h5py
+
+8. rmpe_dataset_server-master
+    - Prerequisites
+        - Boost
+            conda install boost
+        - libzmq
+            sudo sh -c "echo 'deb http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/xUbuntu_16.04/ /' > /etc/apt/sources.list.d/libzmq3-dev.list"
+            sudo apt-get update
+            sudo apt-get install libzmq3-dev
+        - cppzmq
+            download and unzip the lib, cd to directory
+            mkdir build
+            cd build
+            cmake ..
+            sudo make -j4 install
+
+9. what does 38/19 mean?
+    17 given keypoints 1(neck) calculated by shoulders 1 background
+
+10. keypoint definitions of different datasets
+# AIC
+# 0/右肩，1/右肘，2/右腕，3/左肩，4/左肘，5/左腕，6/右髋，7/右膝，8/右踝，9/左髋，10/左膝，11/左踝，12/头顶，13/脖子 14/bkg
+
+# COCO
+# 19 channels
+# 0/nose 1/Neck 2/RShoulder 3/RElbow 4/RWrist 5/LShoulder 6/LElbow 7/LWrist 8/RHip 9/RKnee 10/RAnkle
+# 11/LHip 12/LKnee 13/LAnkle 14/REye 15/LEye 16/REar 17/LEar 18/Bkg
+
+# joints
+# MSCOCO   0: nonsense  1: not visible  2: visible
+# AIC      3: nonsense  1: visible      2: not visible
+
+11. DataTransformer.cpp　分析
+    #include <fstream>  重要！！
+    class CPMDataTransformer
+
+    -> Transform_nv
+
+        -> clahe ?? 限制对比度的自适应直方图均衡
+
+        -> target_dist??
+
+    h5file *f_in, *f_out
+    为f_out 生成group: /data, /mask, /label
+
+    核心函数　cpmDataTransformer->Transform_nv
+    sudo apt-get update    sudo apt-get install libgtk2.0-dev
+
+12. ValueError: Unknown entry in loss dictionary: "weight_stage3_L2".

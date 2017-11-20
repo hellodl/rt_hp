@@ -1,0 +1,11 @@
+python gen_hdf5_x.py \
+    --data_dir=/home/x6850/works/input/AIC \
+    --train_ann_dir=annotations/person_keypoints_train2017.json \
+    --train_img_dir=train2017 \
+    --valid_ann_dir=annotations/person_keypoints_valid2017.json \
+    --valid_img_dir=valid2017 \
+    --train_hdf5_path=train_dataset.h5 \
+    --valid_hdf5_path=valid_dataset.h5 \
+    --valid_size=500 \
+    --joint_num=14 \
+    --log_path=hdf5.log
