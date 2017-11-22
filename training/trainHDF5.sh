@@ -1,10 +1,10 @@
 python gen_train_hdf5.py \
-    --data_dir=/media/x6850/DataI1/AIC \
-    --train_ann_dir=annotations/person_keypoints_train2017_part5.json \
-    --train_img_dir=11 \
+    --data_dir=/media/x6850/DataX/Input/aic \
+    --train_ann_dir=train_annotations_split/train_annotations_p19.json \
+    --train_img_dir=train_data_split/train2017_p19 \
+    --train_hdf5_path=train_dataset_p19.h5 \
     --valid_ann_dir=annotations/person_keypoints_valid2017.json \
     --valid_img_dir=valid2017 \
-    --train_hdf5_path=train_dataset_part5.h5 \
     --valid_hdf5_path=valid_dataset.h5 \
     --valid_size=0 \
     --joint_num=14 \

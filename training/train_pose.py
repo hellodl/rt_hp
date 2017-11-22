@@ -36,7 +36,7 @@ max_iter = 40  # 600000
 # True = start data generator client, False = use augmented dataset file (deprecated)
 use_client_gen = True
 
-WEIGHTS_BEST = "weights.best.h5"
+WEIGHTS_BEST = "/home/x6850/works/model/AIC/weights.best.h5"
 TRAINING_LOG = "training.csv"
 LOGS_DIR = "./logs"
 

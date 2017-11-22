@@ -111,8 +111,8 @@ void CPMDataTransformer::RotatePoint(Point2f& p, Mat R){
 
 bool CPMDataTransformer::augmentation_flip(Mat& img_src, Mat& img_aug, MetaData& meta, int mode) {
   /* modified by g.hy */
-  cout << "---------------------------------------" << endl;
-  cout << "           augmentation_flip           " << endl;
+  //cout << "---------------------------------------" << endl;
+  //cout << "           augmentation_flip           " << endl;
   bool doflip;
   if(param_.mirror == false)
   {
@@ -120,7 +120,7 @@ bool CPMDataTransformer::augmentation_flip(Mat& img_src, Mat& img_aug, MetaData&
   }
   else if(param_.aug_way == "rand"){
     float dice = Rand(RAND_MAX) / static_cast <float> (RAND_MAX);
-    cout << "dice: " << dice << endl;
+    //cout << "dice: " << dice << endl;
     doflip = (dice <= param_.flip_prob);
   }
   else if(param_.aug_way == "table"){
@@ -130,7 +130,7 @@ bool CPMDataTransformer::augmentation_flip(Mat& img_src, Mat& img_aug, MetaData&
     doflip = 0;
   }
 
-  cout << "doflip: " << doflip << endl;
+  //cout << "doflip: " << doflip << endl;
   if(doflip){
     flip(img_src, img_aug, 1);
     int w = img_src.cols;
@@ -159,13 +159,13 @@ bool CPMDataTransformer::augmentation_flip(Mat& img_src, Mat& img_aug, MetaData&
 
 float CPMDataTransformer::augmentation_rotate(Mat& img_src, Mat& img_dst, MetaData& meta, int mode) {
   /* checked by g.hy */
-  cout << "---------------------------------------" << endl;
-  cout << "         augmentation_rotate           " << endl;
+  //cout << "---------------------------------------" << endl;
+  //cout << "         augmentation_rotate           " << endl;
 
   float degree;
   if(param_.aug_way == "rand"){
     float dice = Rand(RAND_MAX) / static_cast <float> (RAND_MAX);
-    cout << "dice: " << dice << endl;
+    //cout << "dice: " << dice << endl;
     degree = (dice - 0.5) * 2 * param_.max_rotate_degree;
   }
   else if(param_.aug_way == "table"){
@@ -177,7 +177,7 @@ float CPMDataTransformer::augmentation_rotate(Mat& img_src, Mat& img_dst, MetaDa
 
   Point2f center(img_src.cols/2.0, img_src.rows/2.0);
   Mat R = getRotationMatrix2D(center, degree, 1.0);
-  cout << "Degree: " << degree << endl;
+  //cout << "Degree: " << degree << endl;
   Rect bbox = RotatedRect(center, img_src.size(), degree).boundingRect();
 
   //cout << "R.at<double>(0,0) <->  cos(alpha): " << R.at<double>(0,0) <<endl;
@@ -209,10 +209,10 @@ float CPMDataTransformer::augmentation_rotate(Mat& img_src, Mat& img_dst, MetaDa
 
 float CPMDataTransformer::augmentation_scale(Mat& img_src, Mat& img_temp, MetaData& meta, int mode) {
   /* checked */
-  cout << "---------------------------------------" << endl;
-  cout << "         augmentation_scale            " << endl;
+  //cout << "---------------------------------------" << endl;
+  //cout << "         augmentation_scale            " << endl;
   float dice = Rand(RAND_MAX) / static_cast <float> (RAND_MAX);
-  cout << "dice: " << dice << endl;
+  //cout << "dice: " << dice << endl;
   float scale_multiplier;
 
   if(dice > param_.scale_prob) {
@@ -221,15 +221,15 @@ float CPMDataTransformer::augmentation_scale(Mat& img_src, Mat& img_temp, MetaDa
   }
   else {
     float dice2 = Rand(RAND_MAX) / static_cast <float> (RAND_MAX);
-    cout << "dice2: " << dice2 << endl;
+    //cout << "dice2: " << dice2 << endl;
     scale_multiplier = (param_.scale_max - param_.scale_min) * dice2 + param_.scale_min; //linear shear into [scale_min, scale_max]
   }
   float scale_abs = param_.target_dist / meta.scale_self;
   float scale = scale_abs * scale_multiplier;
 
-  cout << "param_.target_dist: " << param_.target_dist << endl;
-  cout << "scale_abs: " << scale_abs << endl;
-  cout << "scale_multiplier: " << scale_multiplier << endl;
+  //cout << "param_.target_dist: " << param_.target_dist << endl;
+  //cout << "scale_abs: " << scale_abs << endl;
+  //cout << "scale_multiplier: " << scale_multiplier << endl;
   resize(img_src, img_temp, Size(), scale, scale, INTER_CUBIC);
 
   //modify meta data
@@ -349,7 +349,6 @@ void CPMDataTransformer::putVecMaps(double* entryX, double* entryY, Mat& count, 
           count.at<uchar>(g_y, g_x) = cnt + 1;
         }
       }
-
     }
   }
 }
@@ -379,8 +378,8 @@ void CPMDataTransformer::generateLabelMap(double* transformed_label, Mat& img_au
                       {j_LElbow,j_LWrist},    // checked
                       {j_Neck,j_Head}};       // checked
 
-  cout << "---------------------------------------" << endl;
-  cout << "           generateLabelMap            " << endl;
+  //cout << "---------------------------------------" << endl;
+  //cout << "           generateLabelMap            " << endl;
 
   for(int i=0;i<nl;i++){
     Mat count = Mat::zeros(grid_y, grid_x, CV_8UC1);
@@ -432,8 +431,6 @@ void CPMDataTransformer::generateLabelMap(double* transformed_label, Mat& img_au
       transformed_label[(nl*2+ np_in_lmdb)*channelOffset + g_y*grid_x + g_x] = max(1.0-maximum, 0.0);
     }
   }
-
-  cout << "---------------------------------------" << endl;
 }
 
 void CPMDataTransformer::clahe(Mat& bgr_image, int tileSize, int clipLimit) {
@@ -476,13 +473,13 @@ string DecodeString(const uchar *data, size_t idx) {
 
 void CPMDataTransformer::ReadMetaData(MetaData& meta, const uchar *data, size_t offset3, size_t offset1) { //very specific to genLMDB.py
   /* checked by g.hy */
-  cout << "---------------------------------------" << endl;
-  cout << "             ReadMetaData              " << endl;
+  //cout << "---------------------------------------" << endl;
+  //cout << "             ReadMetaData              " << endl;
   // ------------------- Dataset name ----------------------
   /* line 0*/
-  cout << "offset3(w*h*c): " << offset3 << endl;
+  //cout << "offset3(w*h*c): " << offset3 << endl;
   meta.dataset = DecodeString(data, offset3);
-  cout << "meta.dataset: "<< meta.dataset << endl;
+  //cout << "meta.dataset: "<< meta.dataset << endl;
   // offset 3 代表图像数据，　第四帧为meta data
   // offset 1 一行，　用在metadata
   // ------------------- Image Dimension -------------------
@@ -490,8 +487,8 @@ void CPMDataTransformer::ReadMetaData(MetaData& meta, const uchar *data, size_t 
   float height, width;
   DecodeFloats(data, offset3+offset1, &height, 1);
   DecodeFloats(data, offset3+offset1+4, &width, 1);
-  cout << "height: "<< height << endl;
-  cout << "width: "<< width << endl;
+  //cout << "height: "<< height << endl;
+  //cout << "width: "<< width << endl;
   meta.img_size = Size(width, height);
   // ----------- Validation, nop, counters -----------------
   /* line 2*/

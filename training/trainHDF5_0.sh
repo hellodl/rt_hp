@@ -1,11 +1,11 @@
-python gen_valid_hdf5.py \
+python gen_train_hdf5.py \
     --data_dir=/media/x6850/DataX/Input/aic \
     --train_ann_dir=train_annotations_split/train_annotations_p20.json \
     --train_img_dir=train_data_split/train2017_p20 \
     --train_hdf5_path=train_dataset_p20.h5 \
-    --valid_ann_dir=annotations/valid_annotations.json \
+    --valid_ann_dir=annotations/person_keypoints_valid2017.json \
     --valid_img_dir=valid2017 \
     --valid_hdf5_path=valid_dataset.h5 \
-    --valid_size=30000 \
+    --valid_size=0 \
     --joint_num=14 \
     --log_path=hdf5.log

@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import pylab
 import struct
 import logging
+import time
 
 dataset_dir = None
 tr_ann_path = None
@@ -114,13 +115,14 @@ def process():
         dataset_size = len(ky_annotations)
         for i, img in enumerate(ky_annotations):  # traverse all img
             if count % 500 == 0:
-                print("%s/%s annotations have be analyzied." % (count, dataset_size))
+                print("%s/%s annotations have been analyzied." % (count, dataset_size))
 
             img_id = img['image_id']
             kp_anns = img['keypoint_annotations']
             bb_anns = img['human_annotations']
 
-            # print(img_path+ '/' + img_id + '.jpg')
+            if i == 0:
+                print(img_path+ '/' + img_id + '.jpg')
             image = cv2.imread(img_path + '/' + img_id + '.jpg')
             h, w, c = image.shape
 
@@ -396,5 +398,7 @@ def writeHDF5():
 if __name__ == '__main__':
     argsParse()
     argsCheck()
+    start_time = time.time()
     process()
     writeHDF5()
+    print('Complete hdf5_file in %.2f seconds.' % (time.time() - start_time))

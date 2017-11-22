@@ -114,7 +114,7 @@ def process():
         dataset_size = len(ky_annotations)
         for i, img in enumerate(ky_annotations):  # traverse all img
             if count % 500 == 0:
-                print("%s/%s annotations have be analyzied." % (count, dataset_size))
+                print("%s/%s annotations have been analyzied." % (count, dataset_size))
 
             img_id = img['image_id']
             kp_anns = img['keypoint_annotations']
