@@ -82,3 +82,6 @@
 12. ValueError: Unknown entry in loss dictionary: "weight_stage3_L2".
 
 13. ten people are ignored in the validation set.
+
+14. origin results keys:
+    best : loss_stage6_L2 = 6.06958 loss = 192.202 (lr = 2e-05)　

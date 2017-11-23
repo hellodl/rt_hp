@@ -13,6 +13,7 @@ from keras.layers.convolutional import Conv2D
 from keras.applications.vgg19 import VGG19
 from keras.utils.training_utils import multi_gpu_model
 import keras.backend as K
+from keras.utils import plot_model
 
 def gen_MultiGPU_model(model):
     opt_str = model.optimizer.__str__().split(' ')[0].split('.')[-1]
@@ -64,7 +65,7 @@ from_vgg['conv4_2'] = 'block4_conv2'
 if False:  # os.path.exists(WEIGHTS_BEST):
     print("Loading the best weights...")
 
-    model.load_weights(WEIGHTS_BEST)
+    model.load_weights("/home/x6850/works/model/AIC/weights.best_v1.0.h5")
     last_epoch = get_last_epoch() + 1
 else:
     print("Loading vgg19 weights...")
@@ -190,9 +191,9 @@ multisgd = MultiSGD(lr=base_lr, momentum=momentum, decay=0.0, nesterov=False, lr
 
 # start training
 model.compile(loss=losses, optimizer=multisgd, metrics=['accuracy'])
-
-print(model.summary())
-input('waiting...')
+plot_model(model, to_file='model.png')
+# print(model.summary())
+# input('waiting...')
 # multiGPU_model = gen_MultiGPU_model(model)
 
 print('Start training ...')
@@ -209,12 +210,11 @@ model.fit_generator(train_di,
 
 """
 m_model = multi_gpu_model(model, gpus=2)
-
-print(m_model.summary())
-
+m_model.load_weights("/home/x6850/works/model/AIC/weights.best_v1.0.h5")
 m_model.compile(optimizer=multisgd, loss=losses_multi, metrics={'concatenate_16': 'accuracy', 'concatenate_17': 'accuracy'})
-
-input('waiting...')
+# print(m_model.summary())
+plot_model(m_model, to_file='m_model.png')
+input('Shall we ?')
 m_model.fit_generator(train_di,
                             steps_per_epoch=train_samples // batch_size,
                             epochs=max_iter,
@@ -222,9 +222,6 @@ m_model.fit_generator(train_di,
                             #validation_data=val_di,
                             #validation_steps=val_samples // batch_size,
                             use_multiprocessing=False,
-                            initial_epoch=last_epoch
+                            initial_epoch=last_epoch,
+                            verbose=1
                             )
-
-
-
-
